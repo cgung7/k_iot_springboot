@@ -14,6 +14,9 @@ import org.springframework.stereotype.Repository;
 // - DB에 데이터를 읽고 쓰는 CRUD 담당 계층
 // - JpaRepository를 상속받음 <엔티티타입, PK타입> 형태로 연결할 테이블 명시
 
+// cf) Entity는 테이블 자체를 1:1로 매핑
+//      Repository는 Entity 테이블에 CRUD 작업을 수행
+
 
 @Repository
 public interface A_TestRepository extends JpaRepository<A_Test, Long> {
