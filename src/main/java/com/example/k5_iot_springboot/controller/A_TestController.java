@@ -28,18 +28,40 @@ public class A_TestController {
     @Autowired // 필드주입 방식
     A_TestService testService;
 
+    // @메서드Mapping("추가URI지정")
+    // : 메서드(POST/GET/PUT/DELETE) + localhost:8080/RequestMapping경로/추가URI
     @PostMapping
     public A_Test createTest(@RequestBody A_Test test) {
         A_Test result = testService.createTest(test); // 인터페이스 사용으로 오타 없어짐(유지보수가 좋아짐)
         return result;
     }
 
+    // 요청 구조: HTTP 메서드 + URI 경로 (URI 자원에 어떠한 HTTP 동작을 실행할 것인지 명시해서 요청)
     @GetMapping("/all")
     public List<A_Test> getAllTests() {
         List<A_Test> result = testService.getAllTests();
         return result;
     }
 
+    // Error creating bean with name 'requestMappingHandlerMapping' defined in class path resource
+    // [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration$EnableWebMvcConfiguration.class]:
+    // Ambiguous mapping. Cannot map 'a_TestController' method
+    @GetMapping("/{testId}")
+    public A_Test getTestByTestId(@PathVariable Long testId) {
+        A_Test result = testService.getTestByTestId(testId);
+        return result;
+    }
+
+    @PutMapping("/{testId}")
+    public A_Test updateTest(@PathVariable Long testId, @RequestBody A_Test test) {
+        A_Test result = testService.updateTest(testId, test);
+        return result;
+    }
+
+    @DeleteMapping("/{testId}")
+    public void deleteTest(@PathVariable Long testId) {
+        testService.deleteTest(testId);
+    }
 
 
 
