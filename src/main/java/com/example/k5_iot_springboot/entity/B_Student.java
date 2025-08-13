@@ -22,6 +22,8 @@ import lombok.Setter;
 public class B_Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // 키방식 지정 어노테이션[@GeneratedValue],전략종류[strategy = GenerationType.]
+    // DB(MySQL - AUTO_INCREMENT) 가 자동으로 ID생성[IDENTITY](ID 카운트 ++)
     private Long id;
 
     // @RequiredArgsConstructor - final 또는 @NonNull 필드를 매개변수로 사용하는 생성자

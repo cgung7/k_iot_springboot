@@ -18,7 +18,7 @@ package com.example.k5_iot_springboot.이론;
             - Status Code
             - Status Text
         2) headers
-        3) body: 데ㅣ터를 전송할 필요가 없는 경우 생략 가능
+        3) body: 데이터를 전송할 필요가 없는 경우 생략 가능
 
 
     === 스프링부트 응답 데이터 정형화 ===
