@@ -1,6 +1,6 @@
 package com.example.k5_iot_springboot.entity;
 
-// Enum DB 행위 동작 처리 
+// Enum DB 행위 동작 처리
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
