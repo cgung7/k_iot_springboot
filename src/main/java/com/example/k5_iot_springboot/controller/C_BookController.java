@@ -23,6 +23,7 @@ public class C_BookController {
 
     private static final String BOOK_BY_ID = "/{id}";
     private static final String BOOK_SEARCH_BY_TITLE = "/search/title";
+    private static final String BOOK_SEARCH_BY_CATEGORY = "/category/{category}";
 
     // 1. 기본 CRUD
     // 1) CREATE
@@ -102,7 +103,7 @@ public class C_BookController {
     }
 
     // 2) 카테고리별 책 조회
-    @GetMapping("/category/{category}") // "/category/ESSAY"
+    @GetMapping(BOOK_SEARCH_BY_CATEGORY) // "/category/ESSAY"
     public ResponseEntity<ResponseDto<List<BookResponseDto>>> getBooksByCategory(
             @PathVariable C_Category category
             ) {
