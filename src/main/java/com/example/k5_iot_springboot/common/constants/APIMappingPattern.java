@@ -22,6 +22,7 @@ public class APIMappingPattern {
         private Posts() {}
 
         public static final String ROOT = BASE + "/posts";
+        public static final String ID_ONLY = "/{postId}";
         public static final String BY_ID = ROOT + "/{postId}";
 
     }
@@ -44,6 +45,8 @@ public class APIMappingPattern {
         private Comments() {}
 
         public static final String ROOT = Posts.BY_ID + "/comments";
+        public static final String ID_ONLY = "/{commentId}";
+
         public static final String BY_ID = ROOT + "/{commentId}";
     }
 

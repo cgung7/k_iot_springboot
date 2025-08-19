@@ -24,7 +24,7 @@ package com.example.k5_iot_springboot.이론;
     +) 각 어노테이션은 message 속성을 가짐
         - 검증 실패 시 사용자에게 보여줄 오류 메세지를 직접 지정하는 역할
 
-    1) @NouNull
+    1) @NotNull
         - 값이 null이 아니어야 함
         - 단, 빈 문자열("")은 허용됨
 
