@@ -21,6 +21,7 @@ import java.util.List;
 @ToString(exclude = "comments")
 // exclude = "comments"
 // : 해당 속성값의 필드를 제외하고 ToString 메서드 내에서 필드값 출력
+@Builder
 public class D_Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -75,6 +76,8 @@ public class D_Post {
     public static D_Post create(String title, String content, String author) {
         return new D_Post(title, content,author);
     }
+
+
 
     public void changeTitle(String title) { this.title = title; }
     public void changeContent(String content) { this.content = content; }

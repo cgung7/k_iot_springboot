@@ -33,7 +33,7 @@ public class APIMappingPattern {
         // 특정 키워드로 제목 검색 조회
         public static final String SEARCH_BY_TITLE = "/search";
 
-        // 댓들이 가장 많은 상위 5개의 게시글 조회
+        // 댓글이 가장 많은 상위 5개의 게시글 조회
         public static final String TOP_BY_COMMENTS = "/top-comments";
 
     }

@@ -85,8 +85,6 @@ public class D_PostController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-
-
     // 7) 특정 키워드로 제목 검색 조회
     @GetMapping(APIMappingPattern.Posts.SEARCH_BY_TITLE) // "api/v1/posts/search?keyword="
     public ResponseEntity<ResponseDto<List<PostListResponseDto>>> searchPostsByTitle(
