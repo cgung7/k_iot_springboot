@@ -166,7 +166,7 @@ public class D_PostServiceImpl implements D_PostService {
                         r.getPostId(),
                         r.getTitle(),
                         r.getAuthor(),
-                        r.getCommentCount()
+                        r.getCommentCount() == null ? 0 : r.getCommentCount().longValue()
                 ))
                 .toList();
 

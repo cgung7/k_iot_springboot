@@ -159,7 +159,7 @@ public interface D_PostRepository extends JpaRepository<D_Post, Long> {
         Long getPostId(); // posts.id
         String getTitle(); // posts.title
         String getAuthor(); // posts.author
-        long getCommentCount(); // count(c.id)
+        Long getCommentCount(); // count(c.id)
     }
 
     @Query(value = """
@@ -231,18 +231,17 @@ public interface D_PostRepository extends JpaRepository<D_Post, Long> {
 
     @Query(value = """
     SELECT 
-            P.id        AS id,
-            P.title     AS title,
-            p.content   AS content,
-            P.author    AS author
-        FROM    
-            posts P
-        LEFT JOIN comments c ON c.post_id = p.id
-        WHERE p.author = :author
-        GROUP BY p.id, p.title, p.author
-        HAVING COUNT(c.id) >= :minCount
-        ORDER BY commentCount DESC, p.id DESC             
-    """,nativeQuery = true)
+        p.id        AS postId,
+        p.title     AS title,
+        p.author    AS author,
+        COUNT(c.id) AS commentCount
+    FROM posts p
+    LEFT JOIN comments c ON c.post_id = p.id
+    WHERE p.author = :author
+    GROUP BY p.id, p.title, p.author
+    HAVING COUNT(c.id) >= :minCount
+    ORDER BY commentCount DESC, p.id DESC
+    """, nativeQuery = true)
     List<PostWithCommentCountProjection> findAuthorPostsWithMinCount(
             @Param("author") String author,
             @Param("minCount") int minCount

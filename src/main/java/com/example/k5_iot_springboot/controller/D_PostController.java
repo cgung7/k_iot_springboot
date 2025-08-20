@@ -118,10 +118,10 @@ public class D_PostController {
 
     // 10) 특정 작성자의 게시글 중, 댓글 수가 minCount 이상인 게시글 조회
     @GetMapping("/author/{author}/min-comments")
-    public ResponseEntity<ResponseDto<List<PostWithCommentCountResponseDto>>> getAuthorPostWithMinComments(
-            @PathVariable("author") @NotBlank(message = "작성자(author)는 비워질 수 없습니다.") String author,
+    public ResponseEntity<ResponseDto<List<PostWithCommentCountResponseDto>>> getAuthorPostsWithMinComments(
+            @PathVariable("author") @NotBlank(message = "작성자(author)는 비워 질 수 없습니다.") String author,
             @RequestParam(name = "minCount", defaultValue = "1")
-            @PositiveOrZero(message = "minCount는 0이상이여야 합니다.") int minCount
+            @PositiveOrZero(message = "minCount는 0 이상이어야 합니다.") int minCount
     ) {
         ResponseDto<List<PostWithCommentCountResponseDto>> response
                 = postService.getAuthorPostsWithMinComments(author, minCount);
