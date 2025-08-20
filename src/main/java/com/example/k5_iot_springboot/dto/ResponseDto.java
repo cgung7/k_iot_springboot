@@ -46,5 +46,14 @@ public class ResponseDto<T> {
         return ResponseDto.set(false, message, null);
     }
 
+    /*
+        요청이 실패했을 때 응답 생성 - 오버로딩
+        @param message 실패 메세지
+        @param data 에러 데이터
+    */
+
+    public static <T> ResponseDto<T> setFailed(String message, T data) {
+        return ResponseDto.set(false, message, data);
+    }
 
 }
