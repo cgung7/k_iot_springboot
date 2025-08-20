@@ -26,7 +26,7 @@ public record PostListResponseDto(
     public PostListResponseDto summarize(int maxLen) {
         String summerized = content == null ? null :
                 (content.length() <= maxLen ? content : content.substring(0,maxLen) + "...");
-        return new PostListResponseDto(id, title, content, summerized);
+        return new PostListResponseDto(id, title, summerized, author);
     }
 
 

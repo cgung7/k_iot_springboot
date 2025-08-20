@@ -25,6 +25,17 @@ public class APIMappingPattern {
         public static final String ID_ONLY = "/{postId}";
         public static final String BY_ID = ROOT + "/{postId}";
 
+
+
+        // 특정 작성자의 모든 게시글 조회
+        public static final String BY_AUTHOR = "/author/{author}";
+
+        // 특정 키워드로 제목 검색 조회
+        public static final String SEARCH_BY_TITLE = "/search";
+
+        // 댓들이 가장 많은 상위 5개의 게시글 조회
+        public static final String TOP_BY_COMMENTS = "/top-comments";
+
     }
 
     // == 3.댓글(D_Comment) == //

@@ -6,9 +6,7 @@ import com.example.k5_iot_springboot.dto.D_Comment.response.CommentResponseDto;
 import com.example.k5_iot_springboot.dto.ResponseDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
  // 기본 읽기 전용
