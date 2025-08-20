@@ -1,5 +1,6 @@
 package com.example.k5_iot_springboot.repository;
 
+import com.example.k5_iot_springboot.dto.D_Post.response.PostListResponseDto;
 import com.example.k5_iot_springboot.entity.D_Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -180,6 +181,72 @@ public interface D_PostRepository extends JpaRepository<D_Post, Long> {
     """, nativeQuery = true)
     List<PostWithCommentCountProjection> findTopPostsByCommentCount_Native(@Param("limit") int limit);
 
+    // 9) 특정 키워드를 포함하는 "댓글"이 달린 게시글 조회
+    public interface PostListProjection {
+        Long getId();
+        String getTitle();
+        String getContent();
+        String getAuthor();
+    }
+
+//    @Query(value = """
+//        SELECT
+//           P.id AS id,
+//           P.title AS title,
+//           P.content AS content,
+//           P.author AS author
+//       FROM
+//           posts P
+//               LEFT JOIN comments C
+//               ON C.post_id = P.id
+//       WHERE EXISTS(
+//               SELECT 1
+//               FROM comments c
+//               WHERE
+//                       c.post_id = P.id
+//                   AND C.content LIKE CONCAT('%', :keyword, '%')
+//           )
+//       ORDER BY P.id DESC
+//    """, nativeQuery = true)
+@Query(value = """
+        SELECT 
+            P.id        AS id,
+            P.title     AS title,
+            p.content   AS content,
+            P.author    AS author
+        FROM    
+            posts P
+                LEFT JOIN comments C 
+                ON C.post_id = P.id
+        WHERE  
+            LOWER(C.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        GROUP BY
+            P.id, P.title, P.content, P.author
+        ORDER BY
+            P.id DESC            
+    """, nativeQuery = true)
+    List<PostListProjection> findByCommentKeyword(@Param("keyword") String keyword);
+
+
+
+    @Query(value = """
+    SELECT 
+            P.id        AS id,
+            P.title     AS title,
+            p.content   AS content,
+            P.author    AS author
+        FROM    
+            posts P
+        LEFT JOIN comments c ON c.post_id = p.id
+        WHERE p.author = :author
+        GROUP BY p.id, p.title, p.author
+        HAVING COUNT(c.id) >= :minCount
+        ORDER BY commentCount DESC, p.id DESC             
+    """,nativeQuery = true)
+    List<PostWithCommentCountProjection> findAuthorPostsWithMinCount(
+            @Param("author") String author,
+            @Param("minCount") int minCount
+    );
 
 
 
