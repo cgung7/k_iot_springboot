@@ -4,6 +4,8 @@ package com.example.k5_iot_springboot.common.constants;
 // : RESTful하게 API 경로를 규칙적으로 설계하는 것
 // - 각 Controller의 고유 경로를 지정
 
+import com.example.k5_iot_springboot.common.errors.FieldErrorItem;
+
 public class APIMappingPattern {
     // == 공통 베이스 / 버전 == //
     public static final String API = "/api";
@@ -61,4 +63,11 @@ public class APIMappingPattern {
         public static final String BY_ID = ROOT + "/{commentId}";
     }
 
+    // == 4. 게시글(F_Board) == //
+    public static final class Boards {
+        private Boards() {}
+
+        public static final String ROOT = BASE + "/boards";
+        public static final String ID_ONLY = "/{boardId}";
+    }
 }
