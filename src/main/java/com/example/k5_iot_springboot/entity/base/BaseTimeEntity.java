@@ -28,7 +28,7 @@ public abstract class BaseTimeEntity {
      */
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "DATETIME(6)")
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     /*
         레코드가 수정될 때마다 자동 갱신되는 시간(UTC 기준)

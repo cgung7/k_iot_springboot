@@ -8,7 +8,6 @@ package com.example.k5_iot_springboot.dto.F_Board.response;
 import com.example.k5_iot_springboot.common.utils.DateUtils;
 import com.example.k5_iot_springboot.entity.F_Board;
 import lombok.Builder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -31,9 +30,9 @@ public class BoardResponseDto {
                     board.getId(),
                     board.getTitle(),
                     board.getContent(),
-                    DateUtils.toKstString(board.getCreateAt()),
+                    DateUtils.toKstString(board.getCreatedAt()),
                     DateUtils.toKstString(board.getUpdatedAt()),
-                    DateUtils.toUtcString(board.getCreateAt()),
+                    DateUtils.toUtcString(board.getCreatedAt()),
                     DateUtils.toUtcString(board.getUpdatedAt())
 
             );
@@ -57,8 +56,8 @@ public class BoardResponseDto {
             return new SummeryResponse(
                     board.getId(),
                     board.getTitle(),
-                    DateUtils.toKstString(board.getCreateAt()),
-                    DateUtils.toUtcString(board.getCreateAt())
+                    DateUtils.toKstString(board.getCreatedAt()),
+                    DateUtils.toUtcString(board.getCreatedAt())
 
 
             );
