@@ -9,16 +9,63 @@ import com.example.k5_iot_springboot.service.F_BoardService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class F_BoardServiceImpl implements F_BoardService {
     private final F_BoardRepository boardRepository;
+
+    // === 페이지네이션 공통: 안전한 Pageable 생성(화이트리스트 정렬) === //
+    // : 정렬 키를 그대로 신뢰할 경우, 존재하지 않는 필드 또는 JPA 동적 JPQL에서 문자열 충돌 발생 가능
+    private static final Set<String> ALLOWED_SORTS = Set.of("id", "title","createdAt", "updatedAt");
+
+    private Pageable buildPageable(int page, int size, String[] sortParams) {
+        // 정렬 파라미터 파싱(스플릿): ["createdAt, desc", "title,asc"] 형태
+        Sort sort = Sort.by("createdAt").descending(); // 기본 정렬: 최신순
+        // >> 정렬 파라미터가 없거나, 전부 화이트리스트에서 무시된 경우 디폴트 정렬을 사용
+
+        if (sortParams != null && sortParams.length > 0) { // 빈 배열이 아닌 경우 (요소 1개 이상)
+            // 정렬 순서를 보장할 리스트 - 여러 정렬 기준을 저장 (순서 보장)
+            List<Sort.Order> orders = new ArrayList<>();
+            for (String p: sortParams) {
+                if (p == null || p.isBlank()) continue;
+                String [] t = p.split(",");
+                String property = t[0].trim();
+
+                // 화이트리스트에 없는 속성은 무시
+                if (!ALLOWED_SORTS.contains(property)) continue;
+
+                Sort.Direction dir = Sort.Direction.DESC;
+                // 기본 정렬 방향은 DESC - 피드/게시물은 최신순 정렬이 일반 (권장)
+                if (t.length > 1) { // 정렬기준이 존재함
+                    dir = "asc".equalsIgnoreCase(t[1].trim())
+                            ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+
+                }
+                orders.add(new Sort.Order(dir, property));
+                // : 파싱한 정렬 기준 한 건을 Sort.Order 객체로 만들어 목록에 추가
+                // - 여러 건이 쌓이면 ORDER BY prop1 dir1, prop2, dir2 ... 순서대로 적용
+            }
+            if (!orders.isEmpty()) sort = Sort.by(orders); // 비워지지 않은 경우 sort값 재할당
+
+        }
+        return PageRequest.of(page, size, sort);
+        // sortParams가 비워진 경우 || 유효한 정룔이 없는 경우
+
+    }
+
+
 
     @Transactional
     @Override
@@ -77,5 +124,15 @@ public class F_BoardServiceImpl implements F_BoardService {
         BoardResponseDto.DetailResponse result = BoardResponseDto.DetailResponse.from(board);
 
         return ResponseDto.setSuccess("SUCCESS", result);
+    }
+
+    @Override
+    public ResponseDto<BoardResponseDto.PageResponse> getBoardsPage(int page, int size, String[] sort) {
+        return null;
+    }
+
+    @Override
+    public ResponseDto<BoardResponseDto.SliceResponse> getBoardsByCursor(Long cursorId, int size) {
+        return null;
     }
 }
