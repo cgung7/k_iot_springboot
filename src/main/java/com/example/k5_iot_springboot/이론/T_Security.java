@@ -107,7 +107,7 @@ package com.example.k5_iot_springboot.이론;
    6) SecurityContext/SecurityContextHolder - 현재 로그인 정보 저장소
        : 인증 성공 시 스프링 스큐리티는 SecurityContext 안에 로그인된 유저 정보를 저장
            >> SecurityContextHolder에 보관, 같은 요청 시 언제든지 꺼낼 수 있음
-           >> 서비스/컨트롤러에서 Authentication 타입의 매개변수로 로그인 사용자 정보 접근이 가능한가?
+           >> 서비스/컨트롤러에서 Authentication 타입의 매개변수로 로그인 사용자 정보 접근이 가능
 
    // == 인가(Authorization) 절차 == //
    7) Authorities (권한) - 어디까지 접근할 수 있는지 확인
