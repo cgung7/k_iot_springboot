@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
     2. UsernamePasswordAuthenticationFilter
     3. DaoAuthenticationProvider
     4. loadUserByUsername(username) ------- 해당 클래스 영역
-    5. UserProncipal 반환
+    5. UserPrincipal 반환
     6. PasswordEncoder로 password 매칭
     7. 인증 서옹 시 SecurityContext에 Authentication 저장, 이후 인가 처리 진행
      */

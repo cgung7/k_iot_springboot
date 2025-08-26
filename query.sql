@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   COMMENT = '사용자';
 
 SELECT * FROM users;
-
+drop table `users`;
 
 
 
