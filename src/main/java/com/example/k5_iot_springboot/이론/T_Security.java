@@ -93,6 +93,7 @@ package com.example.k5_iot_springboot.이론;
                - 해당 아이디/비밀번호 일치 확인
                - DB 기반 로그인, 소셜 로그인, JWT 검증 등 다양한 Provider가 존재
 
+
    4) userDetailsService - 사람 찾기 창구
        : Provider가 아이디를 받으면 UserDetailsService를 호출
            >> DB에서 해당 유저 정보를 찾음
