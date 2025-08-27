@@ -1,7 +1,7 @@
 package com.example.k5_iot_springboot.controller;
 
-import com.example.k5_iot_springboot.dto.G_Auth.response.SignInResponse;
-import com.example.k5_iot_springboot.dto.G_User.request.RoleModifyRequest;
+import com.example.k5_iot_springboot.dto.G_Admin.request.RoleManageRequest;
+import com.example.k5_iot_springboot.dto.G_Admin.response.RoleManageResponse;
 import com.example.k5_iot_springboot.dto.ResponseDto;
 import com.example.k5_iot_springboot.security.UserPrincipal;
 import com.example.k5_iot_springboot.service.G_AdminService;
@@ -31,12 +31,12 @@ public class G_AdminController {
     // 권한 갱신
     @PutMapping("/roles/replace")
     // 자원의 상태를 통째로 교체 (덮어쓰기 - 동일한 요청을 여러 번 보내도 결과는 같음)
-    // : 역등성
-    public ResponseEntity<ResponseDto<Void>> replaceRoles(
+    // : 멱등성
+    public ResponseEntity<ResponseDto<RoleManageResponse.UpdateRolesResponse>> replaceRoles(
             @AuthenticationPrincipal UserPrincipal principal, // 관리자 토큰 정보 가져오기
-            @Valid @RequestBody RoleModifyRequest req) {
-        ResponseDto<Void> response = adminService.replaceRoles(principal, req);
-        return ResponseEntity.ok(ResponseDto.setSuccess("권한이 갱신되었습니다.", null));
+            @Valid @RequestBody RoleManageRequest.UpdateRolesRequest req) {
+        ResponseDto<RoleManageResponse.UpdateRolesResponse> response = adminService.replaceRoles(principal, req);
+        return ResponseEntity.ok().body(response);
     }
 
 
@@ -44,22 +44,22 @@ public class G_AdminController {
     @PostMapping("/roles/add")
     // 새로운 자원을 추가 생성하거나, 기존 자원에 무언가를 덧붙임
     // : 요청을 여러 번 보내면 결과가 다라질 수 있음
-    public ResponseEntity<ResponseDto<SignInResponse>> addRoles(
+    public ResponseEntity<ResponseDto<RoleManageResponse.AddRolesResponse>> addRoles(
             @AuthenticationPrincipal UserPrincipal principal, // 관리자 토큰 정보 가져오기
-            @Valid @RequestBody RoleModifyRequest req) {
-        ResponseDto<SignInResponse> response = adminService.addRoles(principal, req);
+            @Valid @RequestBody RoleManageRequest.AddRoleRequest req) {
+        ResponseDto<RoleManageResponse.AddRolesResponse> response = adminService.addRoles(principal, req);
         return ResponseEntity.ok().body(response);
     }
 
     // 권한 삭제
     @PostMapping("/roles/remove") // 권한만 삭제하기 위해 Post Delete는 데이터까지 삭제
-    public ResponseEntity<ResponseDto<Void>> removeRoles(
+    public ResponseEntity<ResponseDto<RoleManageResponse.RemoveRolesResponse>> removeRoles(
             @AuthenticationPrincipal UserPrincipal principal, // 관리자 토큰 정보 가져오기
-            @Valid @RequestBody RoleModifyRequest req) {
+            @Valid @RequestBody RoleManageRequest.RemoveRoleRequest req) {
 
      {
-            ResponseDto<Void> response = adminService.removeRoles(principal, req);
-            return ResponseEntity.ok(ResponseDto.setSuccess("권한이 삭제되었습니다.", null));
+            ResponseDto<RoleManageResponse.RemoveRolesResponse> response = adminService.removeRoles(principal, req);
+            return ResponseEntity.ok().body(response);
         }
 
     }

@@ -56,7 +56,7 @@ public class UserPrincipal implements UserDetails {
 
     /* 계정 상태 플래그들
 
-    // 각 데이터가 false면 만료 - 로그인 겨부
+    // 각 데이터가 false면 만료 - 로그인 거부
 
     // EX) 도메인 정책 예시
             1. 비밀번호 5회 실패 - accountNonLocked

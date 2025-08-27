@@ -53,8 +53,8 @@ public class G_User extends BaseTimeEntity {
     private String nickname;
 
     // 성별 (선택값, NULL 허용)
-    @Column(name = "gender", length = 20)
     @Enumerated(EnumType.STRING)
+    @Column(name = "gender", length = 20)
     private Gender gender;
 
     // 여러 권한 보유(N:M 관계)
