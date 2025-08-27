@@ -3,12 +3,10 @@ package com.example.k5_iot_springboot.provider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.persistence.criteria.From;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.*;
 
 /*
@@ -56,7 +54,7 @@ public class JwtProvider {
     // 서명용 비밀키, 엑세스 토큰 만료시간(ms), 만료 직후 허용할 시계 오차(s)
     // 환경 변수에 지정한 비밀키와 만료시간 변수 선언
     private final SecretKey key;
-    private final int jwtExpirationMs;
+    private final long jwtExpirationMs;
     private final int clockSkewSeconds;
 
     //
@@ -68,7 +66,7 @@ public class JwtProvider {
             // Value: application.properties나 application.yml과 같은 설정 파일의 값을 클래스 변수에 주입
             //          >> 데이터 타입 자동 인식한다.
             @Value("${jwt.secret}") String secret, // cf) Base64(+,-) 인코딩된 비밀키 문자열이어야 한다.
-            @Value("${jwt.expiration}") int jwtExpirationMs,
+            @Value("${jwt.expiration}") long jwtExpirationMs,
             @Value("${jwt.clock-skew-seconds:0}") int clockSkewSeconds // 기본 0 - 옵션
     ) {
         // 생성자: JwtProvider 객체 생성 시 비밀키와 만료시간 초기화

@@ -118,9 +118,9 @@ public class UserPrincipal implements UserDetails {
     @Override public boolean isAccountNonLocked() { return accountNonLocked; }
     // 계정의 잠김 여부 리턴
     @Override public boolean isCredentialsNonExpired() { return credentialsNonExpired; }
-    // 비밀번호 만료 여부 리턴
+    // 비밀번호 만료(Credentials 여부 리턴
     @Override public boolean isEnabled() { return enabled; }
-    // 계정의 활성화 여부 리턴
+    // 계정의 활성화(Enabled) 여부 리턴
 
 
 

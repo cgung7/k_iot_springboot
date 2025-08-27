@@ -65,7 +65,7 @@ public class G_AuthServiceImpl implements G_AuthService {
     @Override // 읽기 전용
     public ResponseDto<SignInResponse> signIn(SignInRequest req) {
 
-        // 스프링 시큐리티 표준 인증 흐음 (UserDetailsService + PasswordEnoder)
+        // 스프링 시큐리티 표준 인증 흐음 (UserDetailsService + PasswordEncoder)
         Authentication auth = authenticationManager.authenticate(
                 // 내부에서 DadAuthenticationProvider가
                 //  , CustomUserDetailsService.loadUserByUsername(loginId) 호출

@@ -38,7 +38,7 @@ package com.example.k5_iot_springboot.이론;
         - 새로운 UsernamePasswordAuthenticationToken(principal, null, authorities)
         - 상태: authenticated=true, principal=UserPrincipal, credentials=null(보안상 삭제), authorities 포함
 
-    9, AuthenticationManager가 성공 토큰을 반환ㅁ
+    9, AuthenticationManager가 성공 토큰을 반환
         - Authentication auth가 돌아옴(G_AuthServiceImpl)
         - auth.getPrincipal(): UserPrincipal
         - auth.getAuthorities(): ROLE_* 목록
@@ -49,7 +49,7 @@ package com.example.k5_iot_springboot.이론;
 
     11. 응답 작성
         - 해더 Authorization: Bearer <토큰> 또는 바디 JSON 변환
-        - 이후 클라이언트 요ㅕ청마다 해당 토큰을 Authorization 해더로 전송
+        - 이후 클라이언트 요청마다 해당 토큰을 Authorization 해더로 전송
 
         ---------------
         +) 이후 요청 처리 (인가 단계)
