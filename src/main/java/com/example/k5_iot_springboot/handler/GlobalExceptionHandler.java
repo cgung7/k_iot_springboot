@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+// 컨트롤러에서만 오류 감지
 @RestControllerAdvice
 // 스프링이 빈으로 등록 - 해당 프로젝트 전역의 @RestController에서 발생하는 예외를 처리
 // : 예외를 가로채어 JSON 표준 응답을 반환

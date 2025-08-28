@@ -176,9 +176,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
-
-
-
     // USER/ADMIN -> "ROLE_USER"/ "ROLE_ADMIN" 으로 매핑
     private List<GrantedAuthority> toAuthorities(Set<String> roles) {
         if (roles == null || roles.isEmpty()) return List.of(); // 권한이 없으면 빈 배열 반환

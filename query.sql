@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
   COMMENT = '사용자 권한';
 
 SELECT * FROM `user_roles`;
-
+DESC user_roles;
 # 샘플데이터 #
 INSERT INTO user_roles (user_id, role)
 VALUES (1, "ADMIN");
@@ -209,8 +209,10 @@ CONSTRAINT fk_articles_author
   COMMENT = '기사글';
   
   SELECT * FROM articles;
-
-
+SELECT * FROM users;
+DROP TABLE articles;
+DROP TABLE user_roles;
+DROP TABLE users;
 
 
 

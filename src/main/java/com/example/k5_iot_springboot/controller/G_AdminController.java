@@ -13,9 +13,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 // 관리자 전용 사용자 관리 컨트롤러
-@RestController
+@RestController // 메서드 반환값이 자동으로 JSON(또는 다른 포맷)으로 변환하여 HTTP 응답본문으로 전달
 @RequestMapping("/api/v1/admin")
-@RequiredArgsConstructor
+@RequiredArgsConstructor // final이나 @NonNull 필드들을 매개변수로 받는 생성자를 자동으로 만듬(의존성 주입)
 @PreAuthorize("hasRole('ADMIN')")
 // @PreAuthorize("hasAnyRole('ADMIN','MANAGER')") - 복수 권한 체크
 // +) controller 자체 권한 부여도 가능하지만

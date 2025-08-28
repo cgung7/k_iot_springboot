@@ -40,7 +40,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @Getter
 @ToString(exclude = "password") // 로그 등에 password가 노출되지 않도록 ToString 제외
