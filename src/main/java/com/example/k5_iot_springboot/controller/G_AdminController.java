@@ -43,7 +43,7 @@ public class G_AdminController {
     // 권한 추가
     @PostMapping("/roles/add")
     // 새로운 자원을 추가 생성하거나, 기존 자원에 무언가를 덧붙임
-    // : 요청을 여러 번 보내면 결과가 다라질 수 있음
+    // : 요청을 여러 번 보내면 결과가 달라질 수 있음
     public ResponseEntity<ResponseDto<RoleManageResponse.AddRolesResponse>> addRoles(
             @AuthenticationPrincipal UserPrincipal principal, // 관리자 토큰 정보 가져오기
             @Valid @RequestBody RoleManageRequest.AddRoleRequest req) {
