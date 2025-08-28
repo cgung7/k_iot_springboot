@@ -118,8 +118,98 @@ CREATE TABLE IF NOT EXISTS `users` (
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '사용자';
 
+CREATE TABLE IF NOT EXISTS (
+id BIGINT NOT NULL AUTO_INCREMENT,
+    login_id VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    nickname VARCHAR(50) NOT NULL,
+    gender VARCHAR(10),
+    created_at DATETIME(6) NOT NULL,
+    updated_at DATETIME(6) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT `uk_users_login_id` UNIQUE (login_id),
+    CONSTRAINT `uk_users_email` UNIQUE (email),
+    CONSTRAINT `uk_users_nickname` UNIQUE (nickname),
+    CONSTRAINT `uk_users_gender` CHECK (gender IN ('MALE', 'FEMALE'))
+
+) ENGINE=InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  COMMENT = '사용자';
+
 SELECT * FROM users;
 drop table `users`;
+
+
+CREATE TABLE IF NOT EXISTS `users` (
+	id BIGINT NOT NULL AUTO_INCREMENT,
+    login_id VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    nickname VARCHAR(50) NOT NULL,
+    gender VARCHAR(10),
+    created_at DATETIME(6) NOT NULL,
+    updated_at DATETIME(6) NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT `uk_users_login_id` UNIQUE (login_id),
+    CONSTRAINT `uk_users_email` UNIQUE (email),
+    CONSTRAINT `uk_users_nickname` UNIQUE (nickname),
+    CONSTRAINT `uk_users_gender` CHECK (gender IN ('MALE', 'FEMALE'))
+
+) ENGINE=InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  COMMENT = '사용자';
+
+
+# 0827 (G_User_role)
+-- 사용자 권한 테이블
+CREATE TABLE IF NOT EXISTS `user_roles` (
+	user_id BIGINT NOT NULL,
+    role VARCHAR(30) NOT NULL,
+
+    CONSTRAINT fk_user_roles_user
+		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	CONSTRAINT uk_user_roles UNIQUE (user_id, role),
+    
+    CONSTRAINT chk_user_roles_role CHECK (role IN ('USER', 'MANAGER', 'ADMIN'))
+) ENGINE=InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  COMMENT = '사용자 권한';
+
+SELECT * FROM `user_roles`;
+
+# 샘플데이터 #
+INSERT INTO user_roles (user_id, role)
+VALUES (1, "ADMIN");
+
+
+
+# 0828 (H_Article)
+-- 기사 테이블
+CREATE TABLE IF NOT EXISTS `articles` (
+id BIGINT NOT NULL AUTO_INCREMENT,
+title VARCHAR(200) NOT NULL,
+content LONGTEXT NOT NULL,
+author_id BIGINT NOT NULL,
+created_at DATETIME(6) NOT NULL,
+updated_at DATETIME(6) NOT NULL,
+PRIMARY KEY (id),
+CONSTRAINT fk_articles_author
+	FOREIGN KEY (author_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+    
+
+) ENGINE=InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  COMMENT = '기사글';
+  
+  SELECT * FROM articles;
+
 
 
 
