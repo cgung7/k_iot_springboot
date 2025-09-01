@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
-        name = "stocks",
+        name = "stocks", // DB TABLE 명
         indexes = {@Index(name = "idx_stocks_product_id", columnList = "product_id")}
+        // 인덱스 설정        INDEX idx_stocks_product_id                 (product_id)
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

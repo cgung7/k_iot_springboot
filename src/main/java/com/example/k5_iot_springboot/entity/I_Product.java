@@ -2,7 +2,7 @@ package com.example.k5_iot_springboot.entity;
 
 
 import com.example.k5_iot_springboot.entity.base.BaseTimeEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.*; // @Column
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -14,8 +14,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name = "products",
-        indexes = {@Index(name = "idx_products_name", columnList = "name")}, // MYSQL: INDEX idx_product_name (name)
-        uniqueConstraints = { @UniqueConstraint(name = "uq_products_name", columnNames = "name") } // MYSQL: CONSTRAINT uq_products_name UNIQUE (name)
+        indexes = {@Index(name = "idx_products_name", columnList = "name")},
+        //           MYSQL: INDEX idx_product_name                  (name)
+        uniqueConstraints = { @UniqueConstraint(name = "uq_products_name", columnNames = "name") }
+        // MYSQL:                       CONSTRAINT uq_products_name             UNIQUE (name)
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
