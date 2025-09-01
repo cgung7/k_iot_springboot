@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name = "products",
-        indexes = {@Index(name = "idx_products_name", columnList = "name")},
-        uniqueConstraints = { @UniqueConstraint(name = "uq_products_name", columnNames = "name") }
+        indexes = {@Index(name = "idx_products_name", columnList = "name")}, // MYSQL: INDEX idx_product_name (name)
+        uniqueConstraints = { @UniqueConstraint(name = "uq_products_name", columnNames = "name") } // MYSQL: CONSTRAINT uq_products_name UNIQUE (name)
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
