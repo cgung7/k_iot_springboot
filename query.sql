@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     created_at DATETIME(6) NOT NULL,
     updated_at DATETIME(6) NOT NULL,
     CONSTRAINT uq_products_name UNIQUE (name),
-    INDEX idx_product_name (name)		# 제품명으로 제품 조회 시 성능 향상
+    INDEX idx_products_name (name)		# 제품명으로 제품 조회 시 성능 향상
 ) ENGINE=InnoDB							# MYSQL에서 테이블이 데이터를 저장하고 관리하는 방식을 지정하는 명령어
   DEFAULT CHARSET = utf8mb4				# DB나 테이블의 기본 문자 집합 (4바이트까지 지원 - 이모지 포함)👍
   COLLATE = utf8mb4_unicode_ci			# 정렬 순서 지정 (대소문자 구분 없이 문자열 비교 정렬)
@@ -247,6 +247,8 @@ CREATE TABLE IF NOT EXISTS `products` (
   
   # cf) ENGINE=InnoDB: 트랜잭션 지원(ACID), 외래 키 제약조건 지원(참조 무결성 보장)
   
+  
+  # 재고 정보 테이블
   CREATE TABLE IF NOT EXISTS `stocks` (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     product_id BIGINT NOT NULL,
@@ -262,6 +264,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     COLLATE = utf8mb4_unicode_ci
     COMMENT = '상품 재고 정보';
     
+ # 주문 정보 테이블
   CREATE TABLE IF NOT EXISTS `orders` (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -279,6 +282,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     COLLATE = utf8mb4_unicode_ci
     COMMENT = '주문 정보';
     
+  # 주문 상세 정보 테이블  
   CREATE TABLE IF NOT EXISTS `order_items` (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,				# 주문 정보
@@ -299,6 +303,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     COLLATE = utf8mb4_unicode_ci
     COMMENT = '주문 상세 정보';
     
+  # 주문 기록 정보 테이블  
   CREATE TABLE IF NOT EXISTS `order_logs` (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
@@ -329,6 +334,44 @@ CREATE TABLE IF NOT EXISTS `products` (
 		(2, 30, NOW(6), NOW(6)),
 		(3, 70, NOW(6), NOW(6)),
 		(4, 20, NOW(6), NOW(6));
+  ### 0902
+  -- 뷰 (행 단위)
+  -- : 주문 상세 화면 (API) - 한 주문의 각 상품 라인 아이템 정보를 상세 하게 제공할 때
+  -- : 예) GET / api/v1/orders/{orderId}/items
+  CREATE OR REPLACE VIEW order_summary AS 
+  SELECT
+	o.id 						AS order_id,
+    o.user_id 					AS user_id,
+    o.order_status 				AS order_status,
+    p.name 						AS product_name,
+    oi.quantity 				AS quantity,
+    p.price 					AS price,
+    (oi.quantity * p.price) 	AS total_price,
+    o.created_at				AS ordered_ad
+  FROM
+	orders o
+    JOIN order_items oi ON o.id = oi.order_id
+    JOIN products p ON oi.product_id = p.id;
+
+  
+  
+  -- 뷰 (주문 합계)
+CREATE OR REPLACE VIEW order_totals AS
+SELECT
+	o.id 							AS order_id,
+    o.user_id 						AS user_id,
+    o.order_status 					AS order_status,
+    SUM(oi.quantity * p.price) 		AS order_total_amount,
+    SUM(oi.quantity) 				AS order_total_qty,
+    MIN(o.created_at) 				AS ordered_at
+
+FROM
+	orders o
+    JOIN order_items oi ON o.id = oi.order_id
+    JOIN products p ON oi.product_id = p.id
+GROUP BY
+	o.id, o.user_id, o.order_status; -- 주문 '별' 합계: 주문(orders) 정보를 기준으로 그룹화
+    
     
     
     
@@ -338,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `products` (
     SELECT * FROM `order_items`;
     SELECT * FROM `order_logs`;
 
-
+USE k5_iot_springboot;
 
 
 

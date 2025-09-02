@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "products",
         indexes = {@Index(name = "idx_products_name", columnList = "name")},
-        //           MYSQL: INDEX idx_product_name                  (name)
+        //           MYSQL: INDEX idx_products_name                  (name)
         uniqueConstraints = { @UniqueConstraint(name = "uq_products_name", columnNames = "name") }
         // MYSQL:                       CONSTRAINT uq_products_name             UNIQUE (name)
 )
