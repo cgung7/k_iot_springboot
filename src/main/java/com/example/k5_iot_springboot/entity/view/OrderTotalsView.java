@@ -22,7 +22,7 @@ public class OrderTotalsView {
     // 뷰 컬럼명 그대로 사용(DB 작성)
     private Long user_id;
     private String order_status;
-    private Integer order_total_amount;
+    private Long order_total_amount;
     private Long order_total_qty;
 
     @Column(name = "ordered_at")

@@ -170,8 +170,15 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                           // articles 접근 제어
                           .requestMatchers(HttpMethod.GET,"/api/v1/admin/**").permitAll()
 
+                          // product 접근 제어
+                          .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll() // 조회: 권한 없음
+                          .requestMatchers(HttpMethod.POST, "api/v1/products/**").hasRole("ADMIN") // 조회: 권한 ADMIN
+                          .requestMatchers(HttpMethod.PUT, "api/v1/products/**").hasRole("ADMIN") // 조회: 권한 ADMIN
+
                           // ADMIN 전용 권한 관리 API
                           .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+
+
 
                           .anyRequest().authenticated(); // 나머지는 인증 필요 - JWT 토큰이 있어야 접근 가능
             }

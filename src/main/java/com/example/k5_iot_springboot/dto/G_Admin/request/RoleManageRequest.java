@@ -24,7 +24,7 @@ public class RoleManageRequest {
             @NotNull(message = "userId는 필수입니다.")
             @Positive(message = "userId는 양수여야 합니다.")
             Long userId,
-            @NotNull(message = "roles항복은 필수입니다.")
+            @NotNull(message = "roles 항목은 필수입니다.")
             RoleType role
 
     ) {}
@@ -34,7 +34,7 @@ public class RoleManageRequest {
             @NotNull(message = "userId는 필수입니다.")
             @Positive(message = "userId는 양수여야 합니다.")
             Long userId,
-            @NotNull(message = "roles항복은 필수입니다.")
+            @NotNull(message = "roles 항목은 필수입니다.")
             RoleType role
 
     ) {}

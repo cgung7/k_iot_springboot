@@ -340,30 +340,28 @@ CREATE TABLE IF NOT EXISTS `products` (
   -- : 예) GET / api/v1/orders/{orderId}/items
   CREATE OR REPLACE VIEW order_summary AS 
   SELECT
-	o.id 						AS order_id,
-    o.user_id 					AS user_id,
-    o.order_status 				AS order_status,
-    p.name 						AS product_name,
-    oi.quantity 				AS quantity,
-    p.price 					AS price,
-    (oi.quantity * p.price) 	AS total_price,
-    o.created_at				AS ordered_ad
+	o.id 							AS order_id,
+    o.user_id 						AS user_id,
+    o.order_status 					AS order_status,
+    p.name 							AS product_name,
+    oi.quantity 					AS quantity,
+    p.price 						AS price,
+    CAST((oi.quantity * p.price) 	AS SIGNED) AS total_price, -- BIGINT로 고정
+    o.created_at					AS ordered_at
   FROM
 	orders o
     JOIN order_items oi ON o.id = oi.order_id
     JOIN products p ON oi.product_id = p.id;
 
-  
-  
   -- 뷰 (주문 합계)
 CREATE OR REPLACE VIEW order_totals AS
 SELECT
-	o.id 							AS order_id,
-    o.user_id 						AS user_id,
-    o.order_status 					AS order_status,
-    SUM(oi.quantity * p.price) 		AS order_total_amount,
-    SUM(oi.quantity) 				AS order_total_qty,
-    MIN(o.created_at) 				AS ordered_at
+	o.id 								AS order_id,
+    o.user_id 							AS user_id,
+    o.order_status 						AS order_status,
+    CAST(SUM(oi.quantity * p.price) 	AS SIGNED) AS order_total_amount,
+	CAST(SUM(oi.quantity) 				AS SIGNED) AS order_total_qty,
+    MIN(o.created_at) 					AS ordered_at
 
 FROM
 	orders o
@@ -372,9 +370,33 @@ FROM
 GROUP BY
 	o.id, o.user_id, o.order_status; -- 주문 '별' 합계: 주문(orders) 정보를 기준으로 그룹화
     
-    
-    
-    
+-- 트리거: 주문 생성 시 로그
+# 고객 문의/장애 분석 시 "언제 주문 레코드가 생겼는지" 원인 추적에 사용
+DELIMITER //
+CREATE TRIGGER trg_after_order_insert
+	AFTER INSERT ON orders
+    FOR EACH ROW
+    BEGIN
+		INSERT INTO order_logs(order_id, message)
+        VALUES (NEW.id, CONCAT('주문이 생성되었습니다. 주문 ID: ', NEW.id));
+	END //
+DELIMITER ;
+
+-- 트리거: 주문 상태 변경 시 로그
+# 상태 전이 추적 시 "누가 언제 어떤 상태로 바꿨는지" 원인 추적에 사용
+DELIMITER //
+CREATE TRIGGER trg_after_order_status_update
+	AFTER UPDATE ON orders
+    FOR EACH ROW
+    BEGIN
+		IF NEW.order_status <> OLD.order_status THEN -- A <> B 는 A != B와 같은 의미 (같지 않다)
+			INSERT INTO order_logs(order_id, message)
+            VALUES (NEW.id, CONCAT('주문 상태가 ', OLD.order_status
+					, ' -> ' ,'로 변경되었습니다.'));
+		END IF;
+	END //
+    DELIMITER ;
+  
     SELECT * FROM `products`;
     SELECT * FROM `stocks`;
     SELECT * FROM `orders`;

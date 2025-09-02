@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "set") // 모든 필드를 받는 생성자 + staticName 지정 (set 메서드 생성)
