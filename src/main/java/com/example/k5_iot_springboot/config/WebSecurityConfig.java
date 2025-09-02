@@ -172,8 +172,13 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
                           // product 접근 제어
                           .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll() // 조회: 권한 없음
-                          .requestMatchers(HttpMethod.POST, "api/v1/products/**").hasRole("ADMIN") // 조회: 권한 ADMIN
-                          .requestMatchers(HttpMethod.PUT, "api/v1/products/**").hasRole("ADMIN") // 조회: 권한 ADMIN
+                          .requestMatchers(HttpMethod.POST, "/api/v1/products/**").hasRole("ADMIN") // 조회: 권한 ADMIN
+                          .requestMatchers(HttpMethod.PUT, "/api/v1/products/**").hasRole("ADMIN") // 조회: 권한 ADMIN
+
+                          // stocks 접근 제어
+                          .requestMatchers(HttpMethod.GET, "/api/v1/stocks/**").permitAll() // 조회: 권한 없음
+                          .requestMatchers(HttpMethod.POST, "/api/v1/stocks/**").hasAnyRole("ADMIN", "MANAGER")
+                          .requestMatchers(HttpMethod.PUT, "/api/v1/stocks/**").hasAnyRole("ADMIN", "MANAGER")
 
                           // ADMIN 전용 권한 관리 API
                           .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
