@@ -20,6 +20,8 @@ package com.example.k5_iot_springboot.이론;
         - 계층 구조를 URI로 표현
         - 대소문자, 언더바(_) 사용 규칙 준수
         - HTTP 상태코드로 결과를 명확하게 전달
+        >> RESTful API는 **"REST 원칙을 잘 지켜서 만든 웹 API 설계 방식"**
+        >> 좋은 설계를 통해 코드의 일관성과 유지보수가 쉬워지는 효과
 
     3. RESTful API 베스트프렉티스
 
