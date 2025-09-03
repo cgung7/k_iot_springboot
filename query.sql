@@ -392,11 +392,13 @@ CREATE TRIGGER trg_after_order_status_update
 		IF NEW.order_status <> OLD.order_status THEN -- A <> B 는 A != B와 같은 의미 (같지 않다)
 			INSERT INTO order_logs(order_id, message)
             VALUES (NEW.id, CONCAT('주문 상태가 ', OLD.order_status
-					, ' -> ' ,'로 변경되었습니다.'));
+					, ' -> ' , '로 변경되었습니다.'));
 		END IF;
 	END //
     DELIMITER ;
-  
+  drop table products;
+  drop table stocks;
+  drop table order_items;
     SELECT * FROM `products`;
     SELECT * FROM `stocks`;
     SELECT * FROM `orders`;

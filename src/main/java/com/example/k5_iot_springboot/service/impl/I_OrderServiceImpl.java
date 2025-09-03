@@ -203,17 +203,20 @@ public class I_OrderServiceImpl implements I_OrderService {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#userPrincipal.id, authentication)")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#userId, authentication)")
     public ResponseDto<List<OrderResponse.Detail>> search(UserPrincipal userPrincipal, Long userId, OrderStatus status, LocalDateTime from, LocalDateTime to) {
         List<OrderResponse.Detail> data = null;
 
-        List<I_Order> orders = orderRepository.searchOrders(userId, status, from, to);
+        LocalDateTime fromUtc = DateUtils.kstToUtc(from);
+        LocalDateTime toUtc = DateUtils.kstToUtc(to);
+
+        List<I_Order> orders = orderRepository.searchOrders(userId, status, fromUtc, toUtc);
 
         data = orders.stream()
                 .map(this::toOrderResponse)
                 .toList();
 
-        return ResponseDto.setSuccess("조건 겅색이 정상적으로 진행되었습니다.", data);
+        return ResponseDto.setSuccess("조건 검색이 정상적으로 진행되었습니다.", data);
     }
 
     // == 변환 유틸 == //
