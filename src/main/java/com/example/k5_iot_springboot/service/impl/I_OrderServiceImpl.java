@@ -15,6 +15,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,13 +127,93 @@ public class I_OrderServiceImpl implements I_OrderService {
     @Transactional
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.canCancel(#orderId, authentication)")
     public ResponseDto<OrderResponse.Detail> cancel(UserPrincipal userPrincipal, Long orderId) {
-        return null;
+        OrderResponse.Detail data = null;
+
+        I_Order order = orderRepository.findDetailById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("주문을 찾을 수 없습니다. id=" + orderId));
+
+        // 이미 취소된 주문일 경우 그대로 반환 (또는 예외 발생)
+        if (order.getOrderStatus() == OrderStatus.CANCELLED) {
+            throw new IllegalArgumentException("이미 취소된 주문입니다.");
+            // return ResponseDto.setFailed("이미 취소된 주문입니다.);
+
+        }
+
+        // == MANAGER와 ADMIN은 PENDING 상태가 아니어도 (APPROVED 상대라도) 취소 가능 == //
+        // 상태별 분기
+        if (order.getOrderStatus() == OrderStatus.PENDING) {
+            // 승인 전(PENDING): 권한 확인 필요 X
+            // +) 재고 차감이 없었기 때문에 복원 불필요
+            order.setOrderStatus(OrderStatus.CANCELLED);
+        } else if (order.getOrderStatus() == OrderStatus.APPROVED) {
+            // 승인 후(APPROVED): 권한 확인 필요 O
+            // +) MANAGER/ADMIN만 취소 허용
+            // +) 재고 복원 수정
+            if (!hasManagerOrAdmin(userPrincipal)) {
+                // hasManagerOrAdmin의 결과값이 false인 경우
+                throw new IllegalArgumentException("승인된 주문은 관리자 권한(MANAGER/ADMIN)만 취소할 수 있습니다.");
+            }
+            // 권한이 MANAGER | ADMIN 인 경우
+            // : 재고 복원
+            Map<Long, Integer> restoreMap = new HashMap<>();
+            // 같은 상품 정보에 수량에 대한 중복 제거 (단일 수량으로 합치는 기능)
+            for (I_OrderItem item: order.getItems()) {
+                Long productId = item.getProduct().getId();  // 해당 주문 항목의 상품 고유 ID를 순회하여 저장
+                int quantity = item.getQuantity();          // 해당 주문 항복의 수문 수량 순회하여 저장
+                Integer prev = restoreMap.get(productId);   // 상품ID를 KEY로 하고, 수량을 value로 저장하는 Map
+                                                            // 현재 productId에 해달하는 기준 수량을 가져움
+                                                            //      , 해당 Key가 없다면 null 반환
+                restoreMap.put(productId, (prev == null ? quantity : prev + quantity));
+            }
+
+            // 중복 없는 구매의 제품 Id에 대해 자보글 복구
+            for (Map.Entry<Long, Integer> e : restoreMap.entrySet()) {
+                Long productId = e.getKey();
+                int quantity = e.getValue();
+
+                // 재고 레코드형 단위 잠금
+                I_Stock stock = stockRepository.findByProductIdForUpdate(productId)
+                        .orElseThrow(() -> new IllegalStateException("재고 정보가 없습니다. productId=" + productId));
+
+                stock.setQuantity(stock.getQuantity() + quantity); // 변경 감지로 UPDATE
+            }
+
+            order.setOrderStatus(OrderStatus.CANCELLED);
+
+        } else  {
+            throw new IllegalArgumentException("취소할 수 없는 주문 상태 입니다." + order.getOrderStatus());
+        }
+
+
+
+        // PENDING일 때만 취소 가능한 로직
+//        // PENDING이 아니면 취소 불가
+//        if (order.getOrderStatus() != OrderStatus.PENDING) {
+//            throw new IllegalArgumentException("PENDING 상태의 주문만 취소할 수 있습니다.");
+//        }
+//
+//        order.setOrderStatus(OrderStatus.CANCELLED);
+
+
+
+        data = toOrderResponse(order);
+        // + 변경 정보 자동 저장
+        // + 변경 발생 시 DB 트리거에 의해 로그 기록 생성
+        return ResponseDto.setSuccess("주문 취소가 정상적으로 진행되었습니다.", data);
     }
 
     @Override
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#userPrincipal.id, authentication)")
     public ResponseDto<List<OrderResponse.Detail>> search(UserPrincipal userPrincipal, Long userId, OrderStatus status, LocalDateTime from, LocalDateTime to) {
-        return null;
+        List<OrderResponse.Detail> data = null;
+
+        List<I_Order> orders = orderRepository.searchOrders(userId, status, from, to);
+
+        data = orders.stream()
+                .map(this::toOrderResponse)
+                .toList();
+
+        return ResponseDto.setSuccess("조건 겅색이 정상적으로 진행되었습니다.", data);
     }
 
     // == 변환 유틸 == //
@@ -171,5 +252,17 @@ public class I_OrderServiceImpl implements I_OrderService {
                 items
 
         );
+    }
+
+    // === 호출자 권한이 MANAGER/ADMIN인지 확인 ===/
+    private boolean hasManagerOrAdmin(UserPrincipal userPrincipal) {
+        if (userPrincipal == null || userPrincipal.getAuthorities() == null) return false;
+
+        for (GrantedAuthority auth: userPrincipal.getAuthorities()) {
+            String role = auth.getAuthority();
+            if ("ROLE_ADMIN".equals(role) || "ROLE_MANAGER".equals(role)) return true; //154 오류 message 출력 불가
+//            if ("ROLE_ADMIN".equals(role)) return true; // 154번 오류 message 출력
+        }
+        return false;
     }
 }
