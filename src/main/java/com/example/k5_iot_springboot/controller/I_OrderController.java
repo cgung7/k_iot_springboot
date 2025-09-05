@@ -68,11 +68,11 @@ public class I_OrderController {
     public ResponseEntity<ResponseDto<List<OrderResponse.Detail>>> search(
             @AuthenticationPrincipal UserPrincipal userPrincipal,       // 로그인한 사용자 정보
             @RequestParam(required = false) Long userId,                // 검색할 사용자 정보
-            @RequestParam(required = false) OrderStatus status,
+            @RequestParam(required = false) OrderStatus status,         // 주문 상태 어노테이션
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime from,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime from, // 검색범위 - 시간 시작
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime to
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime to    // 검색범위 - 시간 마지막
             ) {
         ResponseDto<List<OrderResponse.Detail>> response = orderService.search(userPrincipal,userId, status, from, to);
         return ResponseEntity.ok(response);

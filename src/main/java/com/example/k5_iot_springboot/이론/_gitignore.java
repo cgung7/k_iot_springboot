@@ -5,7 +5,9 @@ package com.example.k5_iot_springboot.이론;
 // 1) Git 추척에서만 제거 (파일은 로컬에 유지)
 // : -- cached 옵션 (깃에서만 제거, 로컬에서든 유지)
 
-// git rm -- cached application-secret.properties
+// git rm --cached application-secret.properties
+
+//  git rm --cached src/main/resources/application-secret.properties
 
 // 2) commit & push
 

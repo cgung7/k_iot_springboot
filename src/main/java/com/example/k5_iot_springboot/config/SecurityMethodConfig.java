@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @Configuration// 스프링 설정 클래스이임을 명시
 @EnableMethodSecurity(prePostEnabled = true)
 // 스프링 시큐리에서메서드 보안 가능을 활성화
-// prePostEnabled = true 옵숀
+// prePostEnabled = true 옵션
 // : @PreAuthorize, @PostAuthorize,  @PreFilter, @PostFilter 같은
 //  , 어노테이션 기반 보안 기능사용 가능
 // >> 메서드 단위에서 접근 권한을 세밀하게 제어 가능
