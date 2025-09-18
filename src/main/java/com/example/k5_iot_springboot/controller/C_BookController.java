@@ -45,7 +45,9 @@ public class C_BookController {
 
     // 3) READ - 단건 책 조회
     @GetMapping(BOOK_BY_ID)
-    public ResponseEntity<ResponseDto<BookResponseDto>> getBookById(@PathVariable Long id) {
+    public ResponseEntity<ResponseDto<BookResponseDto>> getBookById(
+            @PathVariable Long id
+            ) {
         ResponseDto<BookResponseDto> result = bookService.getBookById(id);
         return ResponseEntity.ok(result);
     }
