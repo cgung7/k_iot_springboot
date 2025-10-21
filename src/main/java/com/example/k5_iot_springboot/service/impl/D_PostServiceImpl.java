@@ -46,7 +46,7 @@ public class D_PostServiceImpl implements D_PostService {
     public ResponseDto<PostDetailResponseDto> getPostById(Long id) {
 
         D_Post post = postRepository.findByIdWithComments(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 id의 게기슬을 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 id의 게시글을 찾을 수 없습니다."));
 
 
         return ResponseDto.setSuccess("SUCCESS", PostDetailResponseDto.from(post));

@@ -99,7 +99,7 @@ public AuthenticationManager authenticationManager(AuthenticationConfiguration c
     List<String> origins = splitToList(allowedOrigins);
 
     config.setAllowCredentials(true);                           // 1) 인증정보(쿠키/Authorization-자격 증명 헤더) 허용
-//    config.setAllowedOriginPatterns(origins);                   // 2) Origin 설정 - 도메인 매칭
+    config.setAllowedOriginPatterns(origins);                   // 2) Origin 설정 - 도메인 매칭
     // >> 허용 origin을 *로 둘 수 없음 (반드시 구체적인 도메인어이야함)
     config.setAllowedHeaders(splitToList(allowedHeaders));      // 3) 요청 헤더 화이트 리스트
     config.setAllowedMethods(splitToList(allowedMethods));      // 4) 허용(allowed) 메서드(method)
@@ -157,6 +157,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                           // === URL 레벨에서 1차 차단 (+ 컴트롤러 메서드에서 @Preauthorize로 2차 방어) === //
                           // 인증/회원가입 등 공개 엔드포인트 - 토큰이 필요없는 기능
                           .requestMatchers("/api/v1/auth/**") .permitAll()
+                          .requestMatchers("/api/v1/notices/**").permitAll()
 
                           // 마이 페이지(내 정보) - 인증 필요 (모든 역할 기능)
                           .requestMatchers("/api/v1/users/me/**").authenticated()

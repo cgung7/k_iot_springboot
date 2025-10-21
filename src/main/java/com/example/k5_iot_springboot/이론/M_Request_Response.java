@@ -5,7 +5,7 @@ package com.example.k5_iot_springboot.이론;
 
     1. 요청
         1) start line: Request Message의 시작 라인 (3가지로 구성)
-            - HTTP 메서드: GET, POST, PUT, DELETE 등
+            - HTTP 메서드: GET, POST, PUT, DELETE 등 (CRUD)
             - Request Target: HTTP Request가 전송되는 목표 주소
             - HTTP Version: version에 따라 Request 메세지 구조나 데이터가 상이할 수 있음 (명시)
 
