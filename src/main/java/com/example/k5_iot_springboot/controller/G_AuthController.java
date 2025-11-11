@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -50,7 +51,17 @@ public class G_AuthController {
     public ResponseEntity<?> logout(
             HttpServletResponse response,
             @AuthenticationPrincipal UserPrincipal userPrincipal
-    ) {
+    )  throws IOException {
+        // 인증 정보 확인
+        if (userPrincipal == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write("""
+                    {"success": false, "message": "로그인 정보가 없습니다."}
+                    """);
+            return ResponseEntity.status(401).body(null);
+        }
+
         authService.deleteRefreshToken(userPrincipal);
 
         // 쿠키 즉시 만료 처리

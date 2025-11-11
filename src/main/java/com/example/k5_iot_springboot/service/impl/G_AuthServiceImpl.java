@@ -178,7 +178,7 @@ public class G_AuthServiceImpl implements G_AuthService {
 
     @Override
     public void deleteRefreshToken(UserPrincipal userPrincipal) {
-
+        refreshTokenRepository.deleteByUsername(userPrincipal.getUsername());
     }
 
     @Override
