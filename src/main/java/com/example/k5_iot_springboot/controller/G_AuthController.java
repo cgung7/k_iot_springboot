@@ -5,13 +5,19 @@ import com.example.k5_iot_springboot.dto.G_Auth.request.SignUpRequest;
 import com.example.k5_iot_springboot.dto.G_Auth.response.SignInResponse;
 import com.example.k5_iot_springboot.dto.J_Mail.MailRequest;
 import com.example.k5_iot_springboot.dto.ResponseDto;
+import com.example.k5_iot_springboot.security.UserPrincipal;
 import com.example.k5_iot_springboot.service.G_AuthService;
 import com.example.k5_iot_springboot.service.J_MailService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth") //회원가입, 로그인, 아이디 찾기, 비밀번호 재설정 등
@@ -41,7 +47,12 @@ public class G_AuthController {
 
     /* 로그아웃 (RefreshToken 쿠키 삭제)*/
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+    public ResponseEntity<?> logout(
+            HttpServletResponse response,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        authService.deleteRefreshToken(userPrincipal);
+
         // 쿠키 즉시 만료 처리
         // jakarta.servlet.http.Cookie
         // : 웹 서버가 웹 브라우저에 저장하도록 보내는 정보 조각
@@ -55,6 +66,48 @@ public class G_AuthController {
         response.addCookie(cookie);
 
         return ResponseEntity.ok(ResponseDto.setSuccess("로그아웃 성공", null));
+    }
+
+    /* Refresh 토큰 검증 및 Access 토큰 재발급*/
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+        try {
+            // 1) 클라이언트 요청 쿠키에서 RefreshToken 추출
+            String refreshToken = extractRefreshTokenFromCookie(request);
+            if (refreshToken == null) {
+                return ResponseEntity.status(401).body(Map.of(
+                        "success", false,
+                        "message", "Refresh Token이 존재하지 않습니다."
+                ));
+            }
+            // 2) Refresh Token 검증 후 새 Access Token 발급
+            String newAccessToken = authService.refreshAccessToken(refreshToken);
+
+            // 3) JSON 형식으로 응답 반환
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "data", Map.of("accessToken",newAccessToken)
+            ));
+
+        } catch (Exception e) {
+            // 검증 실패 -> 401 Unauthorized
+            return ResponseEntity.status(401).body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        }
+    }
+
+    /* private helper 메서드: 요청 쿠키에서 RefreshToken 쿠키를 찾아 반환 */
+    private String extractRefreshTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) return null;
+
+        for (Cookie cookie : request.getCookies()) {
+            if ("refreshToken".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     // 이메일 전송

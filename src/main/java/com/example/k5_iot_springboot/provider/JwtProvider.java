@@ -236,7 +236,7 @@ public class JwtProvider {
 
     // roles >> Set<String> 변환
     @SuppressWarnings("unchecked") // 제네릭 캐스팅 경고 억제 (런타임 확인으로 보완)
-    public Set<String> getRolesFronJwt(String tokenWithoutBearer) {
+    public Set<String> getRolesFromJwt(String tokenWithoutBearer) {
         // get("roles")로 커스텀 클레임을 가저오면, JSON 파싱 결과가 List로 반환이 일반적이다.
         //      >> 문자열 집합(Set<String>)으로 표준화해서 반환
         Object raw = getClaims(tokenWithoutBearer).get(CLAIM_ROLES);
