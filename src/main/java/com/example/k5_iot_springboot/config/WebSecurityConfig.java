@@ -169,7 +169,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                           .requestMatchers(HttpMethod.DELETE, "/api/v1/boards/**").hasAnyRole("ADMIN")
 
                           // articles 접근 제어
-                          .requestMatchers(HttpMethod.GET,"/api/v1/admin/**").permitAll()
+                          .requestMatchers(HttpMethod.GET,"/api/v1/articles/**").permitAll()
 
                           // product 접근 제어
                           .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll() // 조회: 권한 없음
