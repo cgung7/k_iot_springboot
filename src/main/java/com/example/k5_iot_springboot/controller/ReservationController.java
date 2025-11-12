@@ -26,7 +26,7 @@ public class ReservationController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("{reservationId}")
+    @GetMapping("/{reservationId}")
     public ResponseEntity<ResponseDto<ReservationResponseDto>> getReservation(
             @PathVariable long truckId,
             @PathVariable Long reservationId
