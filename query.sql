@@ -443,3 +443,27 @@ CREATE TABLE trucks (
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci
     COMMENT = '푸드트럭 테이블';
+    
+    INSERT INTO trucks (owner_id, name, category, region, description)
+    VALUES
+		(4, '한강 푸드트럭', 'DESSERT', 'SEOUL', '디저트를 파는 한강의 푸드트럭'),
+		(5, '광안리 푸드트럭', 'FOODS', 'BUSAN', '음식을 파는 광안리의 푸드트럭'),
+		(6, '유성 푸드트럭', 'DRINKS', 'DAEJEON', '음료를 파는 유성의 푸드트럭');
+    
+    
+    SELECT * FROM trucks;
+    SELECT * FROM users;
+    
+    INSERT INTO reservations (truck_id, user_id, date, time_slot, status)
+    VALUES
+		(10, 7, '2025-11-10', '10:00-11:00', 'CONFIRMED'),
+		(10, 8, '2025-11-10', '10:00-11:00', 'PENDING'),
+		(10, 7, '2025-11-11', '10:00-11:00', 'CONFIRMED'),
+		(11, 8, '2025-11-11', '10:00-11:00', 'CANCELLED'),
+		(11, 7, '2025-11-11', '10:00-11:00', 'PENDING'),
+		(11, 8, '2025-11-12', '10:00-11:00', 'CANCELLED'),
+		(12, 7, '2025-11-12', '10:00-11:00', 'CONFIRMED'),
+		(12, 8, '2025-11-13', '10:00-11:00', 'PENDING'),
+		(12, 7, '2025-11-13', '10:00-11:00', 'CONFIRMED');
+        
+    SELECT * FROM reservations;

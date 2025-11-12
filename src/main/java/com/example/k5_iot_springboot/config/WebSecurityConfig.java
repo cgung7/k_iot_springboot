@@ -181,6 +181,8 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                           .requestMatchers(HttpMethod.POST, "/api/v1/stocks/**").hasAnyRole("ADMIN", "MANAGER")
                           .requestMatchers(HttpMethod.PUT, "/api/v1/stocks/**").hasAnyRole("ADMIN", "MANAGER")
 
+                          .requestMatchers(HttpMethod.GET, "/api/v1/trucks/**").permitAll()
+
 
                           // order 접근 제어
 
